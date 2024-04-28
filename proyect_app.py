@@ -21,14 +21,9 @@ st.dataframe(math_df)
 
 st.subheader('Haz tus propias gráficas de la clase de portugués:')
 graf_col = st.selectbox('Selecciona las columnas a graficar:', porclass_df.columns)
-if graf_col:
-    fig, ax = plt.subplots()
-    for column in graf_col:
-        ax.hist(porclass_df[column], alpha=0.5, label=column)
-    ax.legend()
-    ax.set_title('Distribución de las Calificaciones Seleccionadas')
-    ax.set_xlabel(f'{column}')
-    ax.set_ylabel('Frecuencia')
-    st.pyplot(fig)
-else:
-    st.write("Selecciona al menos una columna para visualizar.")
+fig, ax = plt.subplots()
+ax.hist(porclass_df[graf_col], bins=20, alpha=0.7, color='blue')
+ax.set_title(f'Distribución de {graf_col}')
+ax.set_xlabel('Valor')
+ax.set_ylabel('Frecuencia')
+st.pyplot(fig)
