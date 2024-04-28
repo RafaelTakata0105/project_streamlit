@@ -27,6 +27,10 @@ def concatenate_one_hot(dataframe, list):
 sts = StandardScaler()
 minmax = MinMaxScaler()
 labelencoder = LabelEncoder()
+tree = DecisionTreeClassifier()
+linear = LinearRegression()
+lasso = Lasso()
+ridge = Ridge()
 
 st.title('Proyecto de analisis de Programación de datos')
 st.header('Rafael Takata Garcia')
@@ -97,3 +101,11 @@ math_df['absences'] = minmax.fit_transform(math_df['age'].values.reshape(-1, 1))
 
 st.markdown('Dataframe de la clase de matemáticas despues de la limpieza:')
 st.dataframe(math_df)
+
+st.header('Probemos los resultados de diferentes métodos de clasificación')
+models = [tree, linear, lasso, ridge]
+X = porclass_df.drop(columns = ['Grade'], axis = 1)
+y = porclass_df['Grade']
+model = st.selectbox('Selecciona las columnas a graficar:', models)
+cv_model = cross_val_score(model, X, y, cv=5).mean()
+st.write(f'{model}: {cv_model}')
