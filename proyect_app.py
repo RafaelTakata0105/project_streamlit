@@ -27,3 +27,4 @@ ax.set_title(f'Distribución de {graf_col}')
 ax.set_xlabel('Valor')
 ax.set_ylabel('Frecuencia')
 st.pyplot(fig)
+
