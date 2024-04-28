@@ -2,6 +2,11 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder, MinMaxScaler
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LinearRegression, Lasso, Ridge
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import cross_val_score, GridSearchCV, train_test_split
 
 st.title('Proyecto de analisis de Programación de datos')
 st.header('Rafael Takata Garcia')
@@ -28,3 +33,5 @@ ax.set_xlabel('Valor')
 ax.set_ylabel('Frecuencia')
 st.pyplot(fig)
 
+st.markdown('¿Es posible crear un modelo que prediga la calificación que obtendrá el estudiante?')
+st.subheader('Dataframes de la limpieza y preparación de los datos')
