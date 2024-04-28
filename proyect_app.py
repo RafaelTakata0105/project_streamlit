@@ -60,6 +60,7 @@ yn_var = ['schoolsup', 'famsup', 'paid', 'activities', 'nursery', 'higher', 'int
 bool_var = ['school', 'sex', 'address', 'famsize', 'Pstatus']
 job_values = list(porclass_df['Mjob'].unique())
 
+#Clase de portugues
 yn_var_replace(porclass_df, yn_var)
 bool_var_replace(porclass_df, bool_var)
 porclass_df = pd.get_dummies(porclass_df, columns = ['Mjob', 'Fjob'])
@@ -77,3 +78,22 @@ porclass_df['absences'] = minmax.fit_transform(porclass_df['age'].values.reshape
 
 st.markdown('Dataframe de la clase de portugues despues de la limpieza:')
 st.dataframe(porclass_df)
+
+#Clase de matematicas
+yn_var_replace(math_df, yn_var)
+bool_var_replace(math_df, bool_var)
+math_df = pd.get_dummies(math_df, columns = ['Mjob', 'Fjob'])
+math_df['health_status'] = math_df['health']
+concatenate_one_hot(math_df, job_values)
+math_df['reason'] = labelencoder.fit_transform(math_df['reason'])
+math_df['guardian'] = labelencoder.fit_transform(math_df['guardian'])
+math_df['Pedu'] = math_df['Fedu'] + math_df['Medu']
+math_df['alcohol'] = math_df['Dalc'] + math_df['Walc']
+math_df['Grade'] = math_df['G1'] + math_df['G2'] + math_df['G3']
+math_df = math_df.drop(columns= ['Fedu', 'Medu', 'Dalc', 'Walc', 'G1', 'G2', 'G3'], axis = 'columns')
+math_df['Grade'] = pd.cut(math_df['Grade'], bins=[-float('inf'), 36, float('inf')], labels=[0, 1], right=False)
+math_df['age'] = sts.fit_transform(math_df['age'].values.reshape(-1, 1))
+math_df['absences'] = minmax.fit_transform(math_df['age'].values.reshape(-1, 1))
+
+st.markdown('Dataframe de la clase de matemáticas despues de la limpieza:')
+st.dataframe(math_df)
