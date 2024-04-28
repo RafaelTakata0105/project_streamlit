@@ -27,7 +27,7 @@ def concatenate_one_hot(dataframe, list):
 sts = StandardScaler()
 minmax = MinMaxScaler()
 labelencoder = LabelEncoder()
-tree = DecisionTreeClassifier()
+tree = DecisionTreeClassifier(max_depth=5, max_features='sqrt', min_samples_split=10)
 linear = LinearRegression()
 lasso = Lasso()
 ridge = Ridge()
@@ -106,6 +106,18 @@ st.header('Probemos los resultados de diferentes métodos de clasificación')
 models = [tree, linear, lasso, ridge]
 X = porclass_df.drop(columns = ['Grade'], axis = 1)
 y = porclass_df['Grade']
-model = st.selectbox('Selecciona las columnas a graficar:', models)
+model = st.selectbox('Selecciona el modelo que desees probar: ', models)
 cv_model = cross_val_score(model, X, y, cv=5).mean()
 st.write(f'{model}: {cv_model}')
+
+#Post entrenamiento y resultados
+st.write('Como puedes ver con los resultados, no existe un modelo que pueda predecir con certeza la nota con las variables dadas ')
+
+#Conclusiones
+st.subheader('Conclusiones')
+st.markdown('Un modelo que intenta averiguar si un alumno aprobó o no basándose en las variables que se le dieron no es realmente fiable ya que sólo tiene un 59 - 72,3% de acierto.')
+st.markdown('Para concluir, podemos decir que no es realmente posible crear un modelo que prediga si un estudiante va a aprobar una clase con las variables que se dieron.')
+
+#Referencias
+st.subheader('Referencias: ')
+st.markdown('Cortez, Paulo. (2014). Student Performance. UCI Machine Learning Repository. https://doi.org/10.24432/C5TG7T.')
