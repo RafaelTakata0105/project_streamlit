@@ -20,11 +20,10 @@ math_df = pd.read_csv('student-mat.csv')
 st.dataframe(math_df)
 
 st.subheader('Haz tus propias gráficas de la clase de portugués:')
-graf_col = st.multiselect('Selecciona las columnas a graficar:', porclass_df.columns)
+graf_col = st.select('Selecciona las columnas a graficar:', porclass_df.columns)
 if graf_col:
     fig, ax = plt.subplots()
-    for column in graf_col:
-        ax.hist(porclass_df[column], alpha=0.5, label=column)
+    ax.hist(porclass_df[graf_col], alpha=0.5, label=graf_col)
     ax.legend()
     ax.set_title('Distribución de las Calificaciones Seleccionadas')
     ax.set_xlabel('Calificación')
