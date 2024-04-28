@@ -19,5 +19,5 @@ st.subheader('Clase de Matemáticas:')
 math_df = pd.read_csv('student-mat.csv')
 st.dataframe(math_df)
 
-st.subheader('Make your own graphs:')
-st.multiselect('Select', porclass_df.columns)
+st.subheader('Haz tus propias gráficas de la clase de portugués:')
+st.multiselect('Selecciona las columnas a graficar:', porclass_df.columns)
