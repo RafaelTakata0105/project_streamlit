@@ -8,6 +8,26 @@ from sklearn.linear_model import LinearRegression, Lasso, Ridge
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import cross_val_score, GridSearchCV, train_test_split
 
+#Funciones
+def yn_var_replace(dataframe, list):
+    for x in list:
+        dataframe[x] = dataframe[x].replace({'yes': 1, 'no': 0})
+def bool_var_replace(dataframe, list):
+    for x in list:
+        unique_values = dataframe[x].unique()
+        dataframe[x] = dataframe[x].replace({unique_values[0] : 1, unique_values[1]: 0})
+def concatenate_one_hot(dataframe, list):
+    for x in list:
+        mom_values = str('Mjob_' + x)
+        dad_values = str('Fjob_' + x)
+        dataframe[x] = dataframe[mom_values] + dataframe[dad_values]
+        dataframe.drop(columns=[mom_values, dad_values], inplace=True)
+
+#Objetos
+sts = StandardScaler()
+minmax = MinMaxScaler()
+labelencoder = LabelEncoder()
+
 st.title('Proyecto de analisis de Programación de datos')
 st.header('Rafael Takata Garcia')
 st.subheader('Primavera 2024')
@@ -35,3 +55,25 @@ st.pyplot(fig)
 
 st.markdown('¿Es posible crear un modelo que prediga la calificación que obtendrá el estudiante?')
 st.subheader('Dataframes de la limpieza y preparación de los datos')
+#Preparación de los datos
+yn_var = ['schoolsup', 'famsup', 'paid', 'activities', 'nursery', 'higher', 'internet', 'romantic']
+bool_var = ['school', 'sex', 'address', 'famsize', 'Pstatus']
+job_values = list(porclass_df['Mjob'].unique())
+
+yn_var_replace(porclass_df, yn_var)
+bool_var_replace(porclass_df, bool_var)
+porclass_df = pd.get_dummies(porclass_df, columns = ['Mjob', 'Fjob'])
+porclass_df['health_status'] = porclass_df['health']
+concatenate_one_hot(porclass_df, job_values)
+porclass_df['reason'] = labelencoder.fit_transform(porclass_df['reason'])
+porclass_df['guardian'] = labelencoder.fit_transform(porclass_df['guardian'])
+porclass_df['Pedu'] = porclass_df['Fedu'] + porclass_df['Medu']
+porclass_df['alcohol'] = porclass_df['Dalc'] + porclass_df['Walc']
+porclass_df['Grade'] = porclass_df['G1'] + porclass_df['G2'] + porclass_df['G3']
+porclass_df = porclass_df.drop(columns= ['Fedu', 'Medu', 'Dalc', 'Walc', 'G1', 'G2', 'G3'], axis = 'columns')
+porclass_df['Grade'] = pd.cut(porclass_df['Grade'], bins=[-float('inf'), 36, float('inf')], labels=[0, 1], right=False)
+porclass_df['age'] = sts.fit_transform(porclass_df['age'].values.reshape(-1, 1))
+porclass_df['absences'] = minmax.fit_transform(porclass_df['age'].values.reshape(-1, 1))
+
+st.markdown('Dataframe de la clase de portugues despues de la limpieza:')
+st.dataframe(porclass_df)
