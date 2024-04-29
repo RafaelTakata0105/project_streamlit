@@ -4,9 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.linear_model import LinearRegression, Lasso, Ridge
+from sklearn.linear_model import LinearRegression, LassoLarsCV, RidgeClassifier
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import cross_val_score, GridSearchCV, train_test_split
+from sklearn.model_selection import cross_val_score
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 
 #Funciones
 def yn_var_replace(dataframe, list):
@@ -27,10 +29,13 @@ def concatenate_one_hot(dataframe, list):
 sts = StandardScaler()
 minmax = MinMaxScaler()
 labelencoder = LabelEncoder()
-tree = DecisionTreeClassifier(max_depth=5, max_features='sqrt', min_samples_split=10)
+tree = DecisionTreeClassifier()
 linear = LinearRegression()
-lasso = Lasso()
-ridge = Ridge()
+lasso = LassoLarsCV()
+ridge = RidgeClassifier()
+svc = SVC()
+rfc = RandomForestClassifier()
+xgboost = GradientBoostingClassifier()
 
 st.title('Proyecto de analisis de Programación de datos')
 st.header('Rafael Takata Garcia')
@@ -103,7 +108,7 @@ st.markdown('Dataframe de la clase de matemáticas despues de la limpieza:')
 st.dataframe(math_df)
 
 st.header('Probemos los resultados de diferentes métodos de clasificación')
-models = [tree, linear, lasso, ridge]
+models = [tree, linear, lasso, ridge, svc, rfc, xgboost]
 X = porclass_df.drop(columns = ['Grade'], axis = 1)
 y = porclass_df['Grade']
 model = st.selectbox('Selecciona el modelo que desees probar: ', models)
@@ -115,7 +120,7 @@ st.write('Como puedes ver con los resultados, no existe un modelo que pueda pred
 
 #Conclusiones
 st.subheader('Conclusiones')
-st.markdown('Un modelo que intenta averiguar si un alumno aprobó o no basándose en las variables que se le dieron no es realmente fiable ya que sólo tiene un 59 - 72,3% de acierto.')
+st.markdown('Un modelo que intenta averiguar si un alumno aprobó o no basándose en las variables que se le dieron no es realmente fiable ya que sólo tiene un 71% de acierto.')
 st.markdown('Para concluir, podemos decir que no es realmente posible crear un modelo que prediga si un estudiante va a aprobar una clase con las variables que se dieron.')
 
 #Referencias
